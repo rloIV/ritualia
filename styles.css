@@ -1,0 +1,530 @@
+/* ==========================================================================
+   Ritualia site, rebuilt to the reference.
+   Sections are full-width with an inner container, so full-bleed bands need
+   no clip-path/box-shadow trick and cannot produce seams.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('fonts/Fraunces_600SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --deep: #3e2517;
+  --deep-soft: #4a2c1a;
+  --pale: #faf3ec;
+  --on-deep: #f5ede4;
+  --on-deep-muted: #cdb5a1;
+  --on-pale: #2b1a10;
+  --on-pale-muted: #7a6252;
+  --accent: #c8763c;
+  --accent-soft: #e08a4f;
+  --on-accent: #ffffff;
+  --card: #ffffff;
+  --card-edge: #eee0d4;
+  --bezel: #191310;
+
+  --radius: 16px;
+  --radius-lg: 24px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  color-scheme: light dark;
+}
+
+/* In dark the relationship inverts: the accent band LIFTS out of a near-black
+   page instead of dropping out of cream. Verified against the alternative
+   (#1C1613 / #241C18), which flattened the rhythm to nothing. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --deep: #2a1a11;
+    --deep-soft: #33200f;
+    --pale: #15110e;
+    --on-deep: #f5ede4;
+    --on-deep-muted: #c4ab98;
+    --on-pale: #ece1d8;
+    --on-pale-muted: #9c8878;
+    --accent: #e08a4f;
+    --accent-soft: #eda265;
+    --on-accent: #1a120c;
+    --card: #201a16;
+    --card-edge: #3a2e27;
+  }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  background: var(--pale);
+  color: var(--on-pale);
+  -webkit-font-smoothing: antialiased;
+  /* Rotated phones overflow. `clip` rather than `hidden` so the sticky nav
+     still works — hidden would create a scroll container and break it. */
+  overflow-x: clip;
+}
+
+img { display: block; max-width: 100%; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.12;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p { margin: 0; }
+
+a { color: inherit; text-underline-offset: 3px; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- bands ---- */
+
+.band { padding: 4.5rem 0; }
+.band--deep { background: var(--deep); color: var(--on-deep); }
+.band--pale { background: var(--pale); color: var(--on-pale); }
+
+.inner {
+  width: min(100% - 2.5rem, 1120px);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--on-pale-muted);
+  margin-bottom: 0.7rem;
+}
+
+.band--deep .eyebrow { color: var(--on-deep-muted); }
+
+.centered { text-align: center; }
+.centered .lead { margin-inline: auto; }
+
+.lead {
+  max-width: 52ch;
+  color: var(--on-pale-muted);
+  margin-top: 0.9rem;
+}
+
+.band--deep .lead { color: var(--on-deep-muted); }
+
+/* ---- nav ---- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--deep);
+  color: var(--on-deep);
+}
+
+.nav .inner {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 0.9rem 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--on-deep);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.brand img { width: 32px; height: 32px; border-radius: 9px; }
+
+.nav-links { display: flex; gap: 1.6rem; font-size: 0.92rem; }
+
+.nav-links a {
+  color: var(--on-deep-muted);
+  text-decoration: none;
+  transition: color 160ms var(--ease-out);
+}
+
+.nav-links a:hover { color: var(--on-deep); }
+
+/* Four items cannot share one line at phone widths and there is no JS for a
+   hamburger. The links live in the footer too, so dropping them loses nothing. */
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+}
+
+.cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+}
+
+.cta small { font-weight: 400; font-size: 0.74rem; opacity: 0.85; }
+
+.cta--lg { padding: 0.85rem 1.7rem; font-size: 1rem; }
+
+/* ---- hero ---- */
+
+.hero { position: relative; overflow: hidden; padding: 4rem 0 5rem; }
+
+.hero .inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .hero .inner { grid-template-columns: 1fr 0.95fr; }
+}
+
+.hero h1 { font-size: clamp(2.3rem, 5.2vw, 3.6rem); }
+
+.hero .lead { font-size: 1.05rem; max-width: 44ch; }
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.8rem;
+}
+
+/* Replaces the reference's ratings row, which would have been invented. */
+.trust {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+  font-size: 0.86rem;
+  color: var(--on-deep-muted);
+}
+
+.trust svg { width: 17px; height: 17px; flex: none; color: var(--accent-soft); }
+
+/* ---- decoration: blobs, sparkles, leaves ---- */
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Both were flat discs, and a hard-edged circle floating in a flat band reads as a
+   stray shape rather than as depth. Radial gradients fade out before their own edge,
+   so what is left is light behind the phones. */
+.blob--1 {
+  width: 720px; height: 720px;
+  right: -180px; top: -280px;
+  background: radial-gradient(circle, var(--deep-soft) 0%, transparent 68%);
+}
+
+.blob--2 {
+  width: 560px; height: 560px;
+  right: 40px; bottom: -230px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 68%);
+  opacity: 0.5;
+}
+
+.sparkle { position: absolute; color: var(--accent-soft); pointer-events: none; z-index: 3; }
+.sparkle--1 { top: 16%; right: 6%; width: 26px; }
+.sparkle--2 { bottom: 24%; right: 2%; width: 16px; opacity: 0.7; }
+
+.leaf {
+  position: absolute;
+  color: var(--accent);
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Sliced down its length by the band's left edge, it read as a rendering fault. Fully
+   inside horizontally and running off the BOTTOM instead: a stem leaving the frame
+   downwards is how a plant is normally cropped. */
+.leaf--hero { left: 8px; bottom: -74px; width: 168px; transform: rotate(-12deg); }
+.leaf--cta-l { left: 2%; top: 50%; width: 130px; transform: translateY(-50%) scaleX(-1); }
+.leaf--cta-r { right: 2%; top: 50%; width: 130px; transform: translateY(-50%); }
+
+/* ---- devices ---- */
+
+.device {
+  padding: 6px;
+  background: var(--bezel);
+  border-radius: 26px;
+  box-shadow: 0 24px 48px rgb(0 0 0 / 34%);
+}
+
+.device img { border-radius: 20px; }
+
+/* The captures are 540x1200. Nothing here may exceed that or it goes soft.
+
+   A fixed stage with both phones absolutely placed, rather than flex + a negative
+   margin: under flex the pair's width depended on how much the column had to give,
+   so the overlap grew as the viewport narrowed until the front phone covered the
+   back one's whole face and the band's `overflow: hidden` took the rest. Here the
+   overlap is a constant 34px (224 + 210 - 400) and the tallest rotated corner is
+   ~495px, which the 500px stage contains -- nothing reaches an edge to be cut. */
+.hero-devices {
+  position: relative;
+  width: min(100%, 400px);
+  height: 500px;
+  margin-inline: auto;
+}
+
+.hero-devices .device { position: absolute; top: 0; }
+.hero-devices img { height: 430px; object-fit: cover; object-position: top; }
+
+.hero-devices .device--front {
+  left: 0;
+  width: 224px;
+  transform: rotate(-4deg);
+  z-index: 2;
+}
+
+.hero-devices .device--back {
+  right: 0;
+  top: 38px;
+  width: 210px;
+  transform: rotate(6deg);
+  z-index: 1;
+}
+
+/* Two phones cannot both stay legible in a phone-width column. The back one is the
+   same screen in dark mode -- decoration, not information -- so it goes. */
+@media (max-width: 640px) {
+  .hero-devices { height: 470px; }
+  .hero-devices .device--back { display: none; }
+  .hero-devices .device--front { left: 50%; margin-left: -112px; }
+}
+
+.preview-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2.4rem;
+}
+
+.preview-row .device { width: 186px; }
+.preview-row img { height: 340px; object-fit: cover; object-position: top; }
+
+/* ---- feature cards ---- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.1rem;
+  margin-top: 2.6rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.5rem;
+  text-align: center;
+}
+
+.badge {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1rem;
+}
+
+.badge svg { width: 24px; height: 24px; }
+
+.card h3 { font-size: 1.08rem; color: var(--accent); margin-bottom: 0.4rem; }
+
+.card p { font-size: 0.9rem; color: var(--on-pale-muted); }
+
+/* ---- pricing ---- */
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin-top: 2.2rem;
+}
+
+.plan {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+  text-align: center;
+}
+
+.plan .price {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--on-pale);
+  font-variant-numeric: tabular-nums;
+}
+
+.plan .term { font-size: 0.86rem; color: var(--on-pale-muted); }
+
+.fineprint {
+  font-size: 0.86rem;
+  color: var(--on-pale-muted);
+  max-width: 62ch;
+  margin: 1.4rem auto 0;
+}
+
+/* ---- closing ---- */
+
+.closing { position: relative; overflow: hidden; }
+.closing .mark { width: 46px; height: 46px; border-radius: 13px; margin: 0 auto 1.2rem; }
+
+/* ---- footer ---- */
+
+.site-footer { background: var(--deep); color: var(--on-deep-muted); padding: 3.2rem 0 0; }
+
+.foot-cols {
+  display: grid;
+  gap: 2.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  padding-bottom: 2.4rem;
+}
+
+.foot-cols h4 {
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-deep);
+  margin: 0 0 0.8rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+.foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.foot-cols a { color: var(--on-deep-muted); text-decoration: none; }
+.foot-cols a:hover { color: var(--on-deep); }
+.foot-cols .tagline { font-size: 0.9rem; max-width: 34ch; margin-top: 0.7rem; }
+
+.foot-bar {
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  padding: 1.3rem 0 2rem;
+  font-size: 0.82rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+}
+
+/* ---- motion: rare tier. Entrance = spatial, hover = feedback. The hidden
+   state lives inside the positive gate so the page can never be left blank
+   by an animation that did not run. ---- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: rise 480ms var(--ease-out) forwards;
+  }
+  .rise:nth-child(2) { animation-delay: 70ms; }
+  .rise:nth-child(3) { animation-delay: 140ms; }
+  .rise:nth-child(4) { animation-delay: 210ms; }
+  .hero-devices { animation: rise 640ms var(--ease-out) 260ms backwards; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta { transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out); }
+  .cta:hover { transform: translateY(-2px); background: var(--accent-soft); }
+  .cta:active { transform: translateY(0) scale(0.99); }
+
+  .preview-row .device {
+    transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+  }
+  .preview-row .device:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 56px rgb(0 0 0 / 42%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- legal pages (privacy.html, terms.html) ----
+   Same tokens, same chrome as the landing page; only the prose rules live here. */
+
+.legal { padding: 1rem 0 0; max-width: 62ch; }
+
+/* `p { margin: 0 }` above means prose blocks need their rhythm restored explicitly, or every
+   paragraph on these pages runs into the next one. */
+.legal > * + * { margin-top: 0.95rem; }
+
+.legal h1 { font-size: clamp(1.9rem, 4vw, 2.5rem); }
+.legal h2 { font-size: 1.3rem; margin-top: 2.2rem; color: var(--accent); }
+.legal h2:first-of-type { margin-top: 1.7rem; }
+
+.legal p,
+.legal li { color: var(--on-pale); }
+
+.legal ul {
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legal .updated { font-size: 0.9rem; color: var(--on-pale-muted); }
+
+.summary-card {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+
+.back-link { display: inline-block; padding-top: 1.6rem; font-size: 0.94rem; }
