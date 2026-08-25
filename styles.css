@@ -514,6 +514,16 @@ button:focus-visible {
   gap: 0.5rem;
 }
 
+/* Deliberately NOT folded into the rule above: `display: flex` blockifies the children, and
+   Chrome then drops the list marker — which for the numbered deletion steps would be the whole
+   point of the list. Plain block layout, spacing restored by hand. */
+.legal ol { padding-left: 1.35rem; }
+.legal ol > li + li { margin-top: 0.5rem; }
+
+/* `.nav` is sticky and about 3.8rem tall, so an anchored jump (privacy.html#delete-data, the
+   URL Play's Data safety form points at) would land the heading underneath it. */
+.legal [id] { scroll-margin-top: 5rem; }
+
 .legal .updated { font-size: 0.9rem; color: var(--on-pale-muted); }
 
 .summary-card {
